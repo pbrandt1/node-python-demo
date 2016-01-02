@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Open+Sans:400,300);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Open Sans'; }
+      h1, h2, h3 {
+        font-family: 'Open Sans';
+        font-weight: 300;
+      }
+      .remark-code, .remark-inline-code {
+        font-family: 'Ubuntu Mono';
+        font-size: 24px;
+      }
+      .remark-slide-content, .remark-inline-code {
+        font-size: 30px;
+      }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Using cool python machine learning stuff in node.js
+
+### easier than it seems
+
+---
+
+# Agenda
+
+1. Motivating example: parse user input
+2. Simple solution
+3. Practical things
+    * installation
+    * tooling
+    * testing
+    * production deployment
+4. Beer
+
+---
+
+# Motivating example: parse user input
+
+---
+
+# Obstacles
+
+## machine learning models take up lots of mem
+how much? ~2 Gb
+
+## how do you handle errors
+
+---
+
+# Simple solution
+
+---
+
+# Which RPC library?
+
+jklol we are web programmers, let's use HTTP
+
+* we are familiar with the API
+* we know how to scale it
+* there are tons of options for cacheing
+
+Might be better to use some more complicated message queue architecture if you
+work at Netflix or something, but for now we'll stay simple.
+
+---
+
+# Practical things
+
+---
+
+# Installation
+
+install pip.  it's like npm
+
+```sh
+python <(curl -s https://bootstrap.pypa.io/get-pip.py)
+```
+
+install virtualenv. it gives you local modules
+
+```sh
+sudo pip install virtualenv
+```
+
+---
+
+Lets make a project
+
+```sh
+mkdir python_server
+cd python_server
+virtualenv python_modules
+source python_modules/bin/activate
+```
+
+---
+
+Install the interesting python modules, spaCy and TextBlob
+
+TextBlob
+
+```sh
+pip install textblob spacy easydict flask
+python -m textblob.download_corpora
+python -m spacy.en.download --force all
+```
+
+---
+
+# Tooling
+
+We want the code to reload on file changes
+But we don't want the giant models to have to reload
+
+module-by-module reloading with `reload()`
+
+---
+
+# Testing
+
+I don't know python testing frameworks, so I just went with mocha
+
+Also, you can try stuff out on the command line
+
+```js
+if (typeof module.parent === 'undefined') {
+  module.exports(process.argv.slice(2).join(' '));
+}
+```
+
+---
+
+# Production Deployment
+
+We can use `pm2` just like a node app
+
+make sure to activate your virtual env first
+
+```sh
+source python_modules/bin/activate
+pm2 start server.py --name server
+```
+
+---
+
+# Beer
+
+Inevitably, you will want to unwind.
+
+follow me @odsdq
+
+code at https://github.com/pbrandt1/node-python-demo
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js">
+    </script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
